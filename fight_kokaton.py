@@ -8,7 +8,7 @@ import pygame as pg
 
 WIDTH = 1600  # ゲームウィンドウの幅
 HEIGHT = 900  # ゲームウィンドウの高さ
-MAIN_DIR = os.path.split(os.path.abspath(__file__))[0]
+MAIN_DIR = os.path.split(os.path.abspath(__file__))[0] #パスを取得
 
 
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
@@ -95,7 +95,7 @@ class Bomb:
     """
     爆弾に関するクラス
     """
-    def __init__(self, color: tuple[int, int, int], rad: int):
+    def __init__(self, color: tuple[int, int, int], rad: int):#色、半径
         """
         引数に基づき爆弾円Surfaceを生成する
         引数1 color：爆弾円の色タプル
@@ -120,6 +120,22 @@ class Bomb:
             self.vy *= -1
         self.rct.move_ip(self.vx, self.vy)
         screen.blit(self.img, self.rct)
+        
+        
+class beam():
+    def __init__(self, bird:Bird):
+        self.img = pg.image(f"{MAIN_DIR}/fig/beam.png")
+        self.rct = self.img.get_rect()
+        self.rct.center = bird.rct.center #こうかとんの中心座標を取得
+        self.vx, self.vy = +5, 0
+        
+    def update(self, screen: pg.Surface):
+        """
+        ビームを速度ベクトルself.vx, self.vyに基づき移動させる
+        引数 screen：画面Surface
+        """
+        self.rct.move_ip(self.vx, self.vy)
+        screen.blit(self.img, self.rct)
 
 
 def main():
@@ -135,6 +151,8 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
+            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    beam = Beam(bird)
         
         screen.blit(bg_img, [0, 0])
         
@@ -144,10 +162,11 @@ def main():
             pg.display.update()
             time.sleep(1)
             return
-
+        
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
         bomb.update(screen)
+        beam.update(screen)
         pg.display.update()
         tmr += 1
         clock.tick(50)
