@@ -156,7 +156,6 @@ def main():
                 beams.append(beam)
         
         screen.blit(bg_img, [0, 0])
-        
         for bomb in bombs:
             if bird.rct.colliderect(bomb.rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
@@ -164,15 +163,14 @@ def main():
                 pg.display.update()
                 time.sleep(1)
                 return
-            
-        
         for bomb_num,bomb in enumerate(bombs):
             for beam_num,beam in enumerate(beams):
                 if beam is not None and beam.rct.colliderect(bomb.rct):  
                     bombs[bomb_num] = None
                     beams[beam_num] = None
                     bird.change_img(6, screen)
-                    
+                elif beam is not None and beam.rct[0] > WIDTH:
+                    beams[beam_num] = None 
         # Noneでない爆弾だけのリストを作る
         bombs = [bomb for bomb in bombs if bomb is not None]
         # 衝突したビームは削除する
