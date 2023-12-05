@@ -103,7 +103,7 @@ class Bomb:
         self.img.set_colorkey((0, 0, 0))
         self.rct = self.img.get_rect()
         #issue1　画面端で爆弾がスタックしないように
-        random.randint(100, WIDTH-100), random.randint(100, HEIGHT-100)  
+        self.rct.center = random.randint(100, WIDTH-100), random.randint(100, HEIGHT-100)  
         self.vx, self.vy = random.choice([-5,+5]), random.choice([-5,+5])
 
     def update(self, screen: pg.Surface):
